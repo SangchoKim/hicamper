@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.etc.search.lookup.sql.lookUpMapper">
+
+	<select id="lookUpView" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		
+		SELECT DISTINCT c.campsite_no, 
+						c.campsite_name, 
+						c.campsite_group, 
+						c.address, 
+						c.activity,
+						c.explanation,
+						c.attension,
+						c.score,	 
+						min(r.price) as price,
+						file.filename,
+						file.saveFileName						 
+		FROM campsite c
+		JOIN room r on c.campsite_no = r.campsite_no
+		JOIN fileupload AS file ON file.fileupload_no = c.fileupload_no
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="null!=search">
+				or campsite_name Like CONCAT('%',#{search},'%')		
+				or address Like CONCAT('%',#{search},'%')
+				or campsite_group Like CONCAT('%',#{search},'%')
+				or activity Like CONCAT('%',#{search},'%')
+			</if>							
+		</trim>
+		group by c.campsite_no
+		Order by r.req_date desc
+		<if test="null != pageStart and null != perPageNum">
+			Limit ${pageStart}, ${perPageNum}
+		</if>
+	</select>
+
+	<select id="countList" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		
+		SELECT count(*)
+		FROM (select DISTINCT c.campsite_no,
+						c.campsite_name, 
+						c.campsite_group, 
+						c.address,
+						c.activity,
+						c.explanation,
+						c.attension,
+						c.score,	 
+						min(r.price) as price,
+						file.filename,
+						file.saveFileName
+            	FROM campsite c
+            	JOIN room r on c.campsite_no = r.campsite_no
+				JOIN fileupload AS file ON file.fileupload_no = c.fileupload_no
+				<trim prefix="where" prefixOverrides="and|or">
+					<if test="null!=search">
+						or campsite_name Like CONCAT('%',#{search},'%')		
+						or address Like CONCAT('%',#{search},'%')
+						or campsite_group Like CONCAT('%',#{search},'%')
+						or activity Like CONCAT('%',#{search},'%')
+					</if>							
+				</trim>
+				group by c.campsite_no
+				Order by r.req_date desc)CNT
+	</select>
+</mapper>

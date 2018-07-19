@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.etc.upload.upload.sql.UploadMapper">
+
+	<insert id="uploadInsert" statementType="PREPARED" parameterType="java.util.HashMap" 
+	useGeneratedKeys="true" keyProperty="fileupload_no" >
+	
+		insert into fileupload(
+					filename
+					,saveFileName
+					,filesize
+					)values(
+					  #{filename}
+					, #{saveFileName}
+					, #{filesize}					
+					)  
+	</insert>
+	
+</mapper>

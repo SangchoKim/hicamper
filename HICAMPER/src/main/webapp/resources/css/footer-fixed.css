@@ -1,0 +1,31 @@
+@charset "utf-8";
+.center {
+	text-align: center;
+	background:	rgba(93, 93, 93, 0.8);
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+
+.footSite a {
+	margin: 0.8rem auto;
+	color: white;
+	font-size: 1.2rem;
+	font: bold;	
+}
+.footSite p {
+	color: white;			
+}
+
+.foot p {
+	margin: 0.8rem auto;
+	color: white;
+	font-size: 1.2rem;
+}
+
+.copyRight {
+	font-size: 1.0rem;
+	color: white;
+	font: bold;
+}

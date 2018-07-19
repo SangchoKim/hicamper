@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.host.sql.Camp_productMapper">
+	
+	<insert id="addCamp_product" parameterType="java.util.HashMap" statementType="PREPARED">
+		Insert into room (
+					campsite_no
+					,room_name
+					,room_group
+					,accept_people
+					,price
+					,amount
+					,explanation
+					,filename
+					,saveFileName
+					,filesize		
+					)values(
+					#{campsite_no}
+					,#{room_name}
+					,#{room_group}
+					,#{accept_people}
+					,#{price}
+					,#{amount}
+					,#{explanation}
+					,#{upload.filename}
+					,#{upload.saveFileName}
+					,#{upload.filesize}									
+					)	
+	</insert>
+	
+	<select id="room_auth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		Select h.id
+				,h.host_no
+				,r.room_no
+		From host h
+		join campsite c on c.host_no = h.host_no
+		join room r on r.campsite_no = c.campsite_no
+		<if test="null != host_no ">
+			and h.host_no = #{host_no}
+		</if>
+		<if test="null != room_no ">
+			and r.room_no = #{room_no}
+		</if>			
+	</select>
+	
+	<select id="compare_pw" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		Select host_no
+		From host 
+		<if test="null != id">
+			where id = #{id}
+		</if>
+		<if test="null != password">
+			and password = #{password}
+		</if>	
+	</select>
+	
+	<update id="updateCamp_product" parameterType="java.util.HashMap" >
+		Update room set 
+			room_name = #{room_name},
+			room_group = #{room_group},
+			accept_people = #{accept_people},
+			price = #{price},
+			amount = #{amount},	
+			explanation = #{explanation},	
+			filename = #{files.filename},
+			saveFileName = #{files.saveFileName},	
+			filesize = #{files.filesize}
+		Where room_no =  #{room_no}		
+	</update>
+	
+	<update id="updateCamp_productWithoutUpload" parameterType="java.util.HashMap" >
+	Update room set 
+		room_name = #{room_name},
+		room_group = #{room_group},
+		accept_people = #{accept_people},
+		price = #{price},
+		amount = #{amount},	
+		explanation = #{explanation}			
+		Where room_no =  #{room_no}		
+	</update>
+	
+	<delete id="deleteCamp_product" parameterType="java.util.HashMap">
+	Delete from room
+	Where room_no = #{room_no}	
+	</delete>
+
+
+</mapper>

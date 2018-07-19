@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.admin.sql.adminMapper">
+	
+	<select id="HostList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT host_no 
+		       ,id
+		       ,phone_num
+		       ,email
+		       ,point
+		       ,representative
+		       ,corporate_num
+		       ,reg_date  
+		FROM host
+		ORDER BY host_no DESC
+		<if test="null != pageStart and null != perPageNum">
+			Limit ${pageStart}, ${perPageNum}
+		</if>		
+	</select>
+	<select id="countHostList" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*) 
+		FROM host
+	</select>
+	<delete id="ad_deleteHost" parameterType="java.util.HashMap" statementType="PREPARED">
+		DELETE from host
+		WHERE host_no = #{host_no}
+	</delete>
+	
+	
+	<select id="UserList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT user_no
+		      ,id
+		      ,name
+		      ,phone_num
+		      ,email
+		      ,birth
+		      ,gender
+		      ,reg_date
+		FROM user
+		WHERE id != "admin" 
+		ORDER BY user_no DESC
+		<if test="null != pageStart and null != perPageNum">
+			Limit ${pageStart}, ${perPageNum}
+		</if>					
+	</select>
+	<select id="countUserList" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*) 
+		FROM user
+		WHERE id != "admin"
+	</select>	
+	<delete id="ad_deleteUser" parameterType="java.util.HashMap" statementType="PREPARED">
+		DELETE from user
+		WHERE user_no = #{user_no}
+	</delete>
+	
+		
+	<select id="BookingList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT a.book_no 
+		       ,b.campsite_name
+		       ,c.room_name
+		       ,a.check_in
+		       ,a.check_out
+		       ,c.price
+		       ,a.reserve_manage
+		       ,a.status
+		       ,a.subscriber
+		       ,a.reg_date
+		FROM book a
+		JOIN campsite b ON a.campsite_no = b.campsite_no
+		JOIN room c ON a.room_no = c.room_no
+		JOIN user d ON a.user_no = d.user_no
+		ORDER BY book_no DESC
+		<if test="null != pageStart and null != perPageNum">
+			Limit ${pageStart}, ${perPageNum}
+		</if>					
+	</select>
+	<select id="countBookingList" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*) 
+		FROM book
+	</select>
+	<select id="countBooking" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*) 
+		FROM book
+		WHERE status = 0
+	</select>
+	<select id="countcancelBooking" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*) 
+		FROM book
+		WHERE status = 1
+	</select>
+	
+	
+	
+	
+	<select id="boardList" parameterType="hashmap" resultType="java.util.HashMap">
+		select * 
+		from board 
+		where board_group = #{board_group}
+		ORDER BY idx DESC 
+		LIMIT #{pageStart}, #{perPageNum}
+	</select>
+	
+	<select id="countBoardList" resultType="int">
+		select count(*) 
+		from board
+		where board_group = #{board_group}
+	</select>
+	
+	<delete id="deleteBoard" parameterType="java.util.HashMap">
+		delete from board 
+		where idx = #{idx}
+	</delete>
+	
+</mapper>

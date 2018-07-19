@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.common.signup.sql.SignUpMapper">
+
+	<insert id="hostSignUp" statementType="PREPARED" parameterType="java.util.HashMap">
+		
+		insert into host(
+					id
+					,password
+					,name
+					,phone_num
+					,email
+					,birth
+					,gender
+					,corporate_num
+					,representative
+					)values(
+					 #{id}
+					,#{password}
+					,#{name}
+					,#{phone_num}
+					,#{email}
+					,#{birth}
+					,#{gender}
+					,#{corporate_num}
+					,#{representative}					
+					)	
+	</insert>
+	
+	
+	<select id="hostCheckID" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		
+		Select COUNT(*)
+		From host
+		where id = #{id}
+			
+	</select>
+	
+	
+	<select id="hostSignUpView" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	
+	
+	
+	
+	
+	
+	
+	
+	</select>
+	
+	<insert id="userSignUp" statementType="PREPARED" parameterType="java.util.HashMap">
+	
+	insert into user(
+					id
+					,password
+					,name
+					,phone_num
+					,email
+					,birth
+					,gender
+					)values(
+					 #{id}
+					,#{password}
+					,#{name}
+					,#{phone_num}
+					,#{email}
+					,#{birth}
+					,#{gender}
+					)	
+	</insert>
+		
+	<select id="userSignUpView" statementType="PREPARED" parameterType="java.util.HashMap">
+	
+	
+	
+	
+	
+	
+	
+	
+	</select>
+	
+	<select id="userCheckID" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		
+		Select COUNT(*)
+		From user
+		where id = #{id}
+			
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
+

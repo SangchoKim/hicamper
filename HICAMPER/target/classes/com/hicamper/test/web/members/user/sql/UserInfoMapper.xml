@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.user.sql.UserInfoMapper">
+
+	<select id="showInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT user_no
+				,id
+				,password
+				,name
+				,phone_num
+				,email
+				,birth
+				,gender
+				,reg_date
+        ,(
+          SELECT current_point
+          FROM point 
+          WHERE user_no = #{user_no}) AS current_point          
+		FROM user 				
+		WHERE user_no= #{user_no}		
+	</select>
+	
+	<update id="updateInfo" parameterType="java.util.HashMap" statementType="PREPARED">
+	
+		update user set
+				password = #{password}
+				,phone_num = #{phone_num}
+				,email = #{email}
+		Where user_no= #{user_no}		
+	</update>
+
+	<delete id="deleteInfo" parameterType="java.util.HashMap" statementType="PREPARED">
+	
+		delete from user
+		where user_no = #{user_no}
+	
+	</delete>
+</mapper>

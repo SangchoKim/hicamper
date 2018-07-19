@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.etc.search.filter.sql.filterMapper">
+
+	<select id="countList" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		
+		Select count(*)
+		From (SELECT DISTINCT cam.campsite_name
+				,cam.campsite_no
+				,cam.campsite_group
+				,cam.address
+				,cam.comforts
+				,cam.activity
+				,cam.explanation
+				,cam.attension
+				,cam.score
+				,min(room.price) as price
+        		,file.filename
+        		,file.saveFileName        		
+		FROM campsite AS cam
+		JOIN room ON room.campsite_no = cam.campsite_no
+   		JOIN fileupload AS file ON file.fileupload_no = cam.fileupload_no  
+   		  
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="null != campsite_group">
+		    	AND campsite_group Like CONCAT('%',#{campsite_group},'%')
+		    </if>
+		    <if test="null != accept_people">
+		    	AND accept_people Like CONCAT('%',#{accept_people},'%')
+		    </if>
+		    <if test="null != comforts">
+		    	AND comforts Like CONCAT('%',#{comforts},'%')
+		    </if>
+		    <if test="null != activity">
+		    	AND activity Like CONCAT('%',#{activity},'%')
+		    </if>
+		    <if test="null != price">
+		    	AND price &lt;= #{price}
+		    </if>
+			<if test="null != check_in or null != check_out">
+				AND room_no not in (select distinct b.room_no
+                        			from book as b
+             			    		join room as r on r.room_no = b.room_no
+									where (r.room_no, r.amount) in (select room_no, count(*)
+    		    	 	    	    								from book
+																	<trim prefix="where" prefixOverrides="AND">
+																		<if test="null != check_out">
+																			AND check_in &lt;  #{check_out}
+																		</if>
+																		<if test="null != check_in">
+																			AND check_out &gt; #{check_in}
+																		</if> 
+																		AND status = 0
+																		group by room_no
+																	</trim>))
+			</if>
+		</trim>
+		group by cam.campsite_no
+		Order by room.req_date desc)CNT
+	</select>
+
+	<select id="filterCheck" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		
+		SELECT DISTINCT cam.campsite_name
+				,cam.campsite_no
+				,cam.campsite_group
+				,cam.address
+				,cam.comforts
+				,cam.activity
+				,cam.explanation
+				,cam.attension
+				,cam.score
+				,min(room.price) as price
+        		,file.filename
+        		,file.saveFileName        		
+		FROM campsite AS cam
+		JOIN room ON room.campsite_no = cam.campsite_no
+   		JOIN fileupload AS file ON file.fileupload_no = cam.fileupload_no  
+   		  
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="null != campsite_group">
+		    	AND campsite_group Like CONCAT('%',#{campsite_group},'%')
+		    </if>
+		    <if test="null != accept_people">
+		    	AND accept_people Like CONCAT('%',#{accept_people},'%')
+		    </if>
+		    <if test="null != comforts">
+		    	AND comforts Like CONCAT('%',#{comforts},'%')
+		    </if>
+		    <if test="null != activity">
+		    	AND activity Like CONCAT('%',#{activity},'%')
+		    </if>
+		    <if test="null != price">
+		    	AND price &lt;= #{price}
+		    </if>
+		    <if test="null != check_in or null != check_out">
+				AND room_no not in (select distinct b.room_no
+                        			from book as b
+             			    		join room as r on r.room_no = b.room_no
+									where (r.room_no, r.amount) in (select room_no, count(*)
+    		    	 	    	    								from book
+																	<trim prefix="where" prefixOverrides="AND">
+																		<if test="null != check_out">
+																			AND check_in &lt;  #{check_out}
+																		</if>
+																		<if test="null != check_in">
+																			AND check_out &gt; #{check_in}
+																		</if> 
+																		AND status = 0
+																		group by room_no
+																	</trim>))
+			</if>
+		</trim>
+		group by cam.campsite_no
+		Order by room.req_date desc
+		<if test="null != pageStart and null != perPageNum">
+			Limit ${pageStart}, ${perPageNum}
+		</if>
+	</select>
+	
+	<select id="showList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		
+		SELECT DISTINCT cam.campsite_name
+				,cam.campsite_no
+				,cam.campsite_group
+				,cam.address
+				,cam.comforts
+				,cam.activity
+				,cam.explanation
+				,cam.attension
+				,cam.score
+				,min(room.price) as price
+        		,file.filename
+        		,file.saveFileName        		
+		FROM campsite AS cam
+		JOIN room ON room.campsite_no = cam.campsite_no
+   		JOIN fileupload AS file ON file.fileupload_no = cam.fileupload_no  
+		group by cam.campsite_no
+		Order by room.req_date desc
+		<if test="null != pageStart and null != perPageNum">
+			Limit ${pageStart}, ${perPageNum}
+		</if>
+	</select>
+</mapper>

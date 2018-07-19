@@ -1,0 +1,1 @@
+mysqldump -u root -p4321 hicamper > C:\backup\%date%-hicamper.sql

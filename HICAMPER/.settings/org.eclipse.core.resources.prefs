@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/hicamper/test/web/members/host/HostController.java=UTF-8
+encoding//src/main/java/com/hicamper/test/web/members/host/Overlapping_host.java=UTF-8
+encoding//src/main/java/com/hicamper/test/web/members/user/UserController.java=UTF-8
+encoding//src/main/webapp/WEB-INF/views/common/board/writeboard.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/common/user/usersignup_view.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/etc/showdetail.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/include/header.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/mypage/user=UTF-8
+encoding//src/main/webapp/WEB-INF/views/mypage/user/currentbooking.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/mypage/user/payresult.jsp=UTF-8
+encoding/<project>=UTF-8

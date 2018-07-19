@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.common.login.sql.SearchPwMapper">
+
+	
+	<select id="checkHostID" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+	    SELECT 	host_no
+	    		, id
+	    		, password
+	    		, name
+	    		, email
+	    FROM host
+	    WHERE id = #{id}
+	</select>
+		
+		
+	<update id="changeHostPW" parameterType="java.util.HashMap">
+		UPDATE host SET
+		  password = #{password}
+		WHERE host_no = #{host_no}
+	</update>
+	
+		
+	<select id="checkUserID" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+	    SELECT 	user_no
+	    		, id
+	    		, password
+	    		, name
+	    		, email
+	    FROM user
+	    WHERE id = #{id}
+	</select>
+	
+		
+	<update id="changeUserPW" parameterType="java.util.HashMap">
+		UPDATE user SET
+		  password = #{password}
+		WHERE user_no = #{user_no}
+	</update>
+
+</mapper>

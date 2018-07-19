@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.common.board.sql.CommentListMapper">
+	
+	<select id="showComment" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT a.comment_no
+            	,a.board_idx
+            	,a.board_group
+      			,a.comment_id
+      			,a.contents
+      			,a.reg_date
+		FROM comment a
+		JOIN board b ON a.board_group = b.board_group
+    	AND a.board_idx = b.idx
+    	AND b.board_group = #{board_group}
+    	AND b.idx = #{idx}
+	</select>
+	
+	<insert id="writeComment" parameterType="java.util.HashMap" statementType="PREPARED" keyProperty="comment_no">
+		INSERT INTO comment (
+			comment_id 
+			,contents
+			,board_idx
+			,board_group
+			)values(
+			#{id}
+			,#{contents}
+			,#{idx}
+			,#{board_group}
+			)
+	</insert>
+	
+	<select id="showUpdate_form" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT comment_no
+      			,contents
+      			,reg_date
+		FROM comment 
+		WHERE comment_no = #{comment_no}
+	</select>
+	
+	<update id="updateComment" parameterType="java.util.HashMap">
+		UPDATE comment SET
+		  contents = #{contents}
+		Where comment_no = #{comment_no}
+	</update>
+	
+	<delete id="deleteComment" parameterType="java.util.HashMap">
+	
+		Delete From comment
+		Where comment_no = ${comment_no} 
+
+	</delete>
+	
+
+</mapper>

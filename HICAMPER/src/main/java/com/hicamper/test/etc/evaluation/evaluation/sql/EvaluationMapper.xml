@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.etc.evaluation.evaluation.sql.EvaluationMapper">
+
+	<update id="thumbup" parameterType="java.util.HashMap">
+		Update board set 
+		likebtn = likebtn + #{btnup}
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="null != idx">
+				idx = #{idx}
+			</if>
+		</trim>
+	</update>
+	
+	<update id="thumbdown" parameterType="java.util.HashMap">
+		Update board set 
+		dislikebtn = dislikebtn + #{btndown}
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="null != idx">
+				idx = #{idx}
+			</if>
+		</trim>
+	</update>
+	
+	<update id="starup" parameterType="java.util.HashMap">
+		Update review set
+		score = (score + ${star})/2	
+	</update>
+	
+	<select id="getPost" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT * 
+		FROM board
+		WHERE idx = #{idx}
+	</select>
+
+</mapper>

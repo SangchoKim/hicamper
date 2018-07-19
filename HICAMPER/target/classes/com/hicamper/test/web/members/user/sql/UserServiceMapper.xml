@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.user.sql.UserServiceMapper">
+
+	<select id="showReview" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+	    SELECT * FROM review
+	</select>
+	
+	<insert id="writeReview" parameterType="java.util.HashMap" statementType="PREPARED">
+	   
+	</insert>
+
+</mapper>

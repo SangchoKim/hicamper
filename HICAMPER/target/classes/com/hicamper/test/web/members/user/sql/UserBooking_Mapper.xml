@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.user.sql.UserBooking_Mapper">
+
+
+	<select id="showbookingpage" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		Select c.campsite_no, 
+				c.campsite_name, 
+				c.campsite_group, 
+				c.address, 
+				c.activity,
+				c.phone_num,
+				c.comforts,
+				c.attension,
+				c.score,
+				r.room_no,  
+				r.price, 
+				r.room_name,
+				r.explanation,
+				r.saveFileName as roomSaveFileName, 
+				r.filename as roomFilename,
+				f.saveFileName 
+		from campsite c
+		join room r on c.campsite_no = r.campsite_no
+		join fileupload f on c.fileupload_no = f.fileupload_no
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="null != campsite_no">
+				And c.campsite_no = #{campsite_no}
+			</if>
+		</trim>	
+	</select>
+	
+	<select id="showUserReview" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		Select 	r.score,
+				r.user_id,
+				r.content,
+				r.reg_date 
+		from review r
+		join campsite c on c.campsite_no = r.campsite_no
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="null != campsite_no">
+				And c.campsite_no = #{campsite_no}
+			</if>
+		</trim>	
+	</select>
+	
+	<select id="bookingInProgress" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select 	c.campsite_no
+				,c.campsite_name
+				,c.address
+				,r.room_name
+				,r.room_no
+				,r.price
+				,r.amount
+				,h.host_no
+			from campsite c
+    		join room r on r.campsite_no = c.campsite_no
+    		join host h on h.host_no = c.host_no
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="null != campsite_no">
+				And c.campsite_no = #{campsite_no}
+			</if>
+			<if test="null != room_no">
+				And r.room_no = #{room_no}
+			</if>
+		</trim>	
+	
+	</select>
+	
+	<select id="bookingInProgress_1" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select 	p.current_point,
+				u.user_no
+			from user u
+	  		join point p on u.user_no = p.user_no
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="null != user_no">
+				And u.user_no = #{user_no}
+			</if>
+		</trim>		
+	</select>
+	
+	<insert id="payBooking" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="book_no">
+		Insert into book (
+					user_no
+					,subscriber
+					,check_in
+					,check_out
+					,campsite_no
+					,room_no
+					,reserve_manage
+					,status					
+					)values(
+					#{user_no}
+					,#{id}
+					,#{check_in}
+					,#{check_out}
+					,#{campsite_no}
+					,#{room_no}							
+					,#{reserve_manage}
+					,0					
+					)
+			
+		</insert>
+	
+	 <select id="showBookingResult" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		
+		select 	c.campsite_no
+				,c.campsite_name
+				,c.address
+				,r.room_name
+				,b.check_in
+				,b.check_out
+				,r.room_no
+				,r.price
+				,r.amount
+				,p.current_point
+		from book b
+		join user u on u.user_no = b.user_no
+		join campsite c on b.campsite_no = c.campsite_no
+		join room r on b.room_no = r.room_no
+		join point p on u.user_no = p.user_no
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="null != id">
+				And u.id = #{id}
+			</if>
+			<if test="null != book_no">
+				And b.book_no = #{book_no}
+			</if>
+			<!-- <if test="null != book_no">
+				And r.room_no = r.room_no -1 
+			</if> -->
+		</trim>	
+	</select> 
+	
+	<update id="updatepoint" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="point_no">
+		Update point set 
+		add_point = add_point + #{add_point},
+		current_point = current_point + #{add_point}
+		where user_no = #{user_no}
+	</update>
+	
+	<insert id="addpoint" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="point_no">
+		Insert into point(
+				user_no
+				,host_no
+				,current_point
+				,add_point
+				,use_point
+				)values(
+				#{user_no}
+				,#{host_no}
+				,#{add_point}
+				,#{add_point}
+				,0			
+				)	
+	</insert>
+	
+	<select id="checkDate" resultType="int" parameterType="java.util.HashMap">
+		Select count(*)
+		From book
+		<trim prefix="where" prefixOverrides="AND|OR">
+			<if test="null != check_in ">
+				AND check_in BETWEEN #{check_in} AND #{check_out}
+			</if> 
+			<if test="null != check_out">
+				AND check_out BETWEEN #{check_in} AND #{check_out}
+			</if>		
+		</trim>	
+	</select>
+	
+	<select id="checkVacancy" resultType="int" parameterType="java.util.HashMap">
+		Select amount
+		From room
+		<trim prefix="where" prefixOverrides="AND|OR">
+			<if test="null != room_no ">
+				AND room_no = #{room_no}
+			</if>
+			<if test="null != campsite_no ">
+				AND campsite_no = #{campsite_no}
+			</if>  	
+		</trim>	
+	</select>
+	
+	
+	
+	<insert id="hostCreatedPoint">
+		Insert into point(
+				user_no
+				,host_no
+				,current_point
+				,add_point
+				,use_point
+				)values(
+				0
+				,#{host_no}
+				,#{use_point}
+				,#{use_point}
+				,0			
+				)
+	</insert>
+	
+	<update id="hostAddPoint" parameterType="java.util.HashMap">
+		Update point set
+			 add_point = add_point + #{use_point}
+			 ,current_point = current_point + #{use_point}
+		where host_no = #{host_no}
+	
+	</update>
+	
+	<update id="subtractpoint" parameterType="java.util.HashMap">
+		Update point set
+			 use_point = use_point + #{use_point}
+			 ,current_point = current_point - #{use_point}
+		where user_no = #{user_no}
+	
+	</update>
+
+
+	<select id="currentBooking" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+	   	select c.campsite_no, 
+	   			c.campsite_name, 
+	   			b.book_no, 
+	   			b.check_in, 
+	   			b.check_out, 
+	   			b.reg_date,
+	   			b.status,
+	   			r.room_name
+		from book b 
+		join campsite c on c.campsite_no = b.campsite_no
+		join room r on r.room_no = b.room_no
+		join user u on u.user_no = b.user_no	
+		<trim prefix="where" prefixOverrides="And|Or">		
+				<if test="id != null">	 
+					and u.id = #{id}					
+				</if>
+		</trim>			  
+	</select>
+	
+	<insert id="review_user" parameterType="java.util.HashMap">
+		Insert into review(
+					campsite_no,
+					host_no,
+					user_no,
+					content,
+					user_id,
+					score
+					)values(
+					#{campsite_no},
+					#{host_no},
+					#{user_no},
+					#{content},
+					#{user_id},
+					#{score}				
+					)
+	</insert>
+
+	
+	<update id="cancelBooking" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="book_no">
+		Update book set
+		reg_date = #{reg_date},
+		status = 1
+		<if test="book_no != null">
+		Where book_no = #{book_no} 
+		</if>		
+	</update>
+	
+	<select id="cancelBooking_select" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select book_no, check_in, check_out, status, campsite_name, room_name, book.reg_date
+		from book, campsite, room
+		<if test="book_no != null">
+		Where book_no = #{book_no}
+		And book.room_no = room.room_no	
+		And book.campsite_no = campsite.campsite_no  		
+		</if> 
+	
+	</select> 
+
+	<select id="getAverageScore" parameterType="java.util.HashMap" resultType="double">
+		SELECT SUM(score) / COUNT(*)
+		FROM review
+		WHERE campsite_no = #{campsite_no}
+	</select>
+	
+	<update id="setCampsiteScore" parameterType="java.util.HashMap">
+		UPDATE campsite 
+		SET score = #{avgScore}
+		WHERE campsite_no = #{campsite_no}
+	</update>
+	
+	<select id="getBookInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT *,
+			TO_DAYS(check_out) - TO_DAYS(check_in) AS dates_of_stay 
+		FROM book
+		WHERE book_no = #{book_no}
+	</select>
+	
+	<select id="getInfoOfBookedRoom" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT price,
+			(SELECT host_no
+			FROM campsite
+			WHERE campsite_no = #{campsite_no}) AS host_no
+		FROM room
+		WHERE room_no = #{room_no}
+	</select>
+	
+	<update id="refundUserPoint" parameterType="java.util.HashMap">
+		UPDATE point
+		SET current_point = current_point + #{price} * #{dates_of_stay}
+	  		,use_point = use_point - #{price} * #{dates_of_stay}
+		WHERE user_no = #{user_no}
+	</update>
+	
+	<update id="refundHostPoint" parameterType="java.util.HashMap"> 
+		UPDATE point
+		SET current_point = current_point - #{price} * #{dates_of_stay}
+  			,add_point = add_point - #{price} * #{dates_of_stay}
+		WHERE host_no = #{host_no}
+	</update>
+</mapper>

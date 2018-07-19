@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.user.sql.UserBasketMapper">
+		
+	<select id="showBasket" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT bas.basket_no
+			  ,cam.campsite_no      			
+		      ,cam.campsite_name
+		      ,cam.address
+		      ,cam.comforts
+		      ,cam.activity
+		      ,file.saveFileName
+		      ,file.filename
+		FROM basket as bas		
+		JOIN campsite as cam ON bas.campsite_no = cam.campsite_no
+		JOIN fileupload as file ON cam.fileupload_no = file.fileupload_no
+		WHERE bas.user_no = #{user_no}  
+	</select>
+		
+	<insert id="addBasket" statementType="PREPARED" parameterType="java.util.HashMap">
+		INSERT INTO basket(
+						user_no
+						,campsite_no
+					) value (
+						#{user_no}
+						,${campsite_no}
+					)
+	</insert>	
+	
+	<delete id="deleteBasket" parameterType="java.util.HashMap" statementType="PREPARED">
+	
+		DELETE from basket
+		WHERE basket_no = #{basket_no}
+		
+	</delete>
+	
+	<select id="checkBasket" resultType="int" parameterType="java.util.HashMap">
+		SELECT COUNT(*)
+		FROM basket
+		WHERE campsite_no = #{campsite_no}
+		AND user_no = #{user_no}
+	</select>
+	
+</mapper>

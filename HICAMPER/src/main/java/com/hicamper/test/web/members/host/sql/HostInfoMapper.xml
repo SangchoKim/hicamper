@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.host.sql.HostInfoMapper">
+
+	<select id="showInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		
+		SELECT host_no
+				,id
+				,password
+				,name
+				,phone_num
+				,email
+				,birth
+				,gender
+				,point
+				,corporate_num
+				,representative
+				,reg_date
+				,(
+		          SELECT current_point
+		          FROM point 
+		          WHERE host_no = #{host_no}) AS current_point
+		FROM host
+		WHERE host_no= #{host_no}	
+	</select>
+		
+	<update id="updateInfo" parameterType="java.util.HashMap" statementType="PREPARED">
+	
+		update host set
+				password = #{password}
+				,phone_num = #{phone_num}
+				,email = #{email}
+				,representative = #{representative}
+				,corporate_num = #{corporate_num}
+		Where host_no= #{host_no}		
+	</update>
+
+	<delete id="deleteInfo" parameterType="java.util.HashMap" statementType="PREPARED">
+	
+		delete from host
+		where host_no = #{host_no}
+	
+	</delete>
+
+
+
+</mapper>
+

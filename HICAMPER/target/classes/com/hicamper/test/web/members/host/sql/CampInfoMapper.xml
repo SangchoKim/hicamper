@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hicamper.test.web.members.host.sql.CampInfoMapper">
+
+	<select id="showCamp" parameterType="java.util.HashMap" resultType="java.util.HashMap">	
+		Select a.campsite_no
+				,a.campsite_name
+				,a.phone_num
+				,a.campsite_group
+				,a.address
+				,a.comforts
+				,a.activity
+				,a.explanation
+				,a.attension
+				,b.host_no
+				,b.id
+				,b.password
+				,f.saveFileName
+				,f.fileupload_no
+		From campsite a
+		Join host b on a.host_no = b.host_no
+		Join fileupload f on a.fileupload_no = f.fileupload_no
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="null != id">
+		    	AND b.id = #{id}
+		    </if>
+		</trim>
+	</select>
+	
+	<select id="showRoom" parameterType="java.util.HashMap" resultType="java.util.HashMap">	
+		Select r.room_no
+				,r.room_name
+				,r.room_group
+				,r.accept_people
+				,r.price
+				,r.amount
+				,r.explanation
+				,r.filename
+				,r.saveFileName
+		From room r 
+		Join campsite c on c.campsite_no = r.campsite_no
+		join host h on h.host_no = c.host_no
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="null != id">
+		    	AND h.id = #{id}
+		    </if> 
+		    <if test="null != room_no">
+		    	AND r.room_no = #{room_no}
+		    </if>
+		</trim>
+	</select>
+	
+	<insert id="addCamp" parameterType="java.util.HashMap" statementType="PREPARED" 
+	useGeneratedKeys="true" keyProperty="campsite_no">
+	
+		Insert into campsite(
+					host_no
+					,fileupload_no
+					,campsite_name
+					,phone_num
+					,campsite_group
+					,address
+					,comforts
+					,activity
+					,explanation
+					,attension						
+					)values(
+					#{host_no}
+					,#{fileupload_no}
+					,#{campsite_name}
+					,#{phone_num}
+					,#{campsite_group}
+					,#{address}
+					,#{comforts}
+					,#{activity}
+					,#{explanation}
+					,#{attension}	
+					)	
+					
+	</insert>
+	
+	<select id="getHost_no" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		Select host_no
+		From host
+		<trim prefix="where" prefixOverrides="And|OR">
+			<if test="null != id">
+				AND id = #{id}
+			</if>
+		</trim>	
+	</select>
+	
+	<update id="updateCamp" parameterType="java.util.HashMap" statementType="PREPARED">
+	
+		update campsite c join fileupload f 
+    			on f.fileupload_no = c.fileupload_no  
+				set
+				c.campsite_name = #{campsite_name}
+				,c.phone_num = #{phone_num}
+				,c.campsite_group = #{campsite_group}
+				,c.address = #{address}
+				,c.comforts = #{comforts}
+				,c.activity = #{activity}
+				,c.explanation = #{explanation}
+				,c.attension = #{attension}
+				,f.filename = #{files.filename}
+				,f.saveFileName = #{files.saveFileName}	
+				,f.filesize = #{files.filesize}
+				<trim prefix="where" prefixOverrides="And|OR">
+					<if test="null != campsite_no">
+					and c.campsite_no = #{campsite_no}
+					</if>
+					<if test="null != fileupload_no">
+					and f.fileupload_no = #{fileupload_no}
+					</if>
+				</trim>			
+	</update>
+	
+	<update id="updateCampWithoutUpload" parameterType="java.util.HashMap" statementType="PREPARED">
+	
+		update campsite set
+				campsite_name = #{campsite_name}
+				,phone_num = #{phone_num}
+				,campsite_group = #{campsite_group}
+				,address = #{address}
+				,comforts = #{comforts}
+				,activity = #{activity}
+				,explanation = #{explanation}
+				,attension = #{attension}
+		where campsite_no = #{campsite_no}		
+	</update>
+
+	<delete id="deleteCamp" parameterType="java.util.HashMap" statementType="PREPARED">
+	
+		delete from campsite
+		where campsite_no = #{campsite_no}
+	
+	</delete>
+
+	<select id="getCampsite_no" parameterType="java.util.HashMap" resultType="int">	
+		SELECT c.campsite_no
+		FROM campsite c
+		JOIN host h ON h.host_no = c.host_no	
+		WHERE h.host_no = #{host_no}
+	</select>
+	
+	<select id="hasCampsite" parameterType="java.util.HashMap" resultType="int">	
+		SELECT COUNT(*)
+		FROM campsite		
+		WHERE host_no = #{host_no}
+	</select>
+		
+</mapper>
+
