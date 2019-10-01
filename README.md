@@ -82,11 +82,9 @@
 
 ## API Reference
 
-#### <Login, SignUp>
-- Passport -> 로그인 기능 구현
-- Flash -> 로그인 실패시
-
-진행중입니다.
+[API-Rest-green](https://img.shields.io/badge/API-Rest-green)
+[API-Mybatis-yellow](https://img.shields.io/badge/API-Mybatis-yellow)
+[API-JDBC-orange](https://img.shields.io/badge/API-JDBC-orange)
  
 ## 업데이트 내역
 
