@@ -82,9 +82,9 @@
 
 ## API Reference
 
-[API-Rest-green](https://img.shields.io/badge/API-Rest-green)
-[API-Mybatis-yellow](https://img.shields.io/badge/API-Mybatis-yellow)
-[API-JDBC-orange](https://img.shields.io/badge/API-JDBC-orange)
+![API-Rest-green](https://img.shields.io/badge/API-Rest-green)
+![API-Mybatis-yellow](https://img.shields.io/badge/API-Mybatis-yellow)
+![API-JDBC-orange](https://img.shields.io/badge/API-JDBC-orange)
  
 ## 업데이트 내역
 
