@@ -24,7 +24,7 @@
 - 평범한 로그인 창  
 - 비밀번호 찾기 기능 추가 wiht 메일
 
-### <SignUp>
+### <회원가입>
  
 ![signUp_1](https://user-images.githubusercontent.com/36231361/65952827-ad3cd200-e47d-11e9-8bd8-0bf712ba1bb7.png)
 ![signUp_2](https://user-images.githubusercontent.com/36231361/65952825-aca43b80-e47d-11e9-9146-e2046cad818c.png)
