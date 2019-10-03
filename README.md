@@ -82,6 +82,7 @@
 
 ## API Reference
 
+![API-DaumMap-blue](https://img.shields.io/badge/API-DaumMap-blue)
 ![API-Rest-green](https://img.shields.io/badge/API-Rest-green)
 ![API-Mybatis-yellow](https://img.shields.io/badge/API-Mybatis-yellow)
 ![API-JDBC-orange](https://img.shields.io/badge/API-JDBC-orange)
